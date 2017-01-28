@@ -72,7 +72,7 @@
 (defun vagrant-tramp--box-name (box)
   "String representing BOX, using the Vagrantfile directory basename and the VM name (excluding 'default')."
   (let ((name (cdr (assoc 'name box))))
-    (concat (file-name-base (cdr (assoc 'dir box)))
+    (concat (cdr (assoc 'dir box))
             (unless (string= name "default")
               (concat "--" name)))))
 
@@ -85,8 +85,9 @@
 (defun vagrant-tramp--completions (&optional file)
   "List for vagrant tramp completion.  FILE argument is ignored."
   (--map (list nil it)
-         (-map 'vagrant-tramp--box-name
-               (vagrant-tramp--running-boxes))))
+         (--map (replace-regexp-in-string "/" "-" it)
+                (-map 'vagrant-tramp--box-name
+                      (vagrant-tramp--running-boxes)))))
 
 ;;;###autoload
 (defun vagrant-tramp-term (box-name)
