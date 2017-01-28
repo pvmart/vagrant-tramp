@@ -54,7 +54,7 @@
 
 (defun vagrant-tramp--all-boxes ()
   "List of VMs per `vagrant global-status` as alists."
-  (let* ((status-cmd "vagrant global-status --machine-readable")
+  (let* ((status-cmd "vagrant global-status --prune --machine-readable")
          (status-raw (shell-command-to-string status-cmd))
          (status-lines (-drop 7 (split-string status-raw "\n")))
          (status-data-raw (--map (mapconcat 'identity
